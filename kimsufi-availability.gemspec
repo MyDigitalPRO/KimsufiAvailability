@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "kimsufi-availability"
-  spec.version       = '1.0.0'
+  spec.version       = '1.0.1'
   spec.authors       = ["MyDigitalPRO"]
   spec.email         = ["info@mdtlpr.com"]
   spec.summary       = %q{Get and parse kimsufi servers availabilities from OVH}

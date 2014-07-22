@@ -6,31 +6,31 @@ class KimsufiAvailability
   SERVER_STATUS_URI = 'https://ws.ovh.com/dedicated/r2/ws.dispatcher/getAvailability2'
 
   %w(ks1 ks2 ks3 ks4 ks5a ks5b ks6).each do |server|
-    define_method(server) { avabilities[server].empty? ? false : avabilities[server] }
+    define_method(server) { availabilities[server].empty? ? false : availabilities[server] }
   end
 
-  def avabilities
-    @avabilities || update
+  def availabilities
+    @availabilities || update
   end
 
   def update
-    @avabilities = simplify_kimsufi_hash JSON.parse open(SERVER_STATUS_URI).read
+    @availabilities = simplify_kimsufi_hash JSON.parse open(SERVER_STATUS_URI).read
   end
 
   private
 
   def simplify_kimsufi_hash hash
     hash = hash['answer']['availability'].select{|e| e['reference']['sk']}
-    avabilities = {}
+    availabilities = {}
     hash.each do |ks|
       next if server_mapping[ks['reference']].nil?
       zones = []
       ks['zones'].each do |zone|
         zones << zone['zone'] if zone['availability'] != 'unavailable'
       end
-      avabilities[server_mapping[ks['reference']]] = zones
+      availabilities[server_mapping[ks['reference']]] = zones
     end
-    avabilities
+    availabilities
   end
 
   def server_mapping
