@@ -2,7 +2,7 @@ require 'json'
 require 'open-uri'
 
 class KimsufiAvailability
-
+  # https://ws.ovh.com/dedicated/r2/ws.dispatcher/getAvailability2
   SERVER_STATUS_URI = 'https://ws.ovh.com/dedicated/r2/ws.dispatcher/getAvailability2'
 
   %w(ks1 ks2 ks3 ks4 ks5a ks5b ks6).each do |server|
@@ -25,8 +25,8 @@ class KimsufiAvailability
     hash.each do |ks|
       next if server_mapping[ks['reference']].nil?
       zones = []
-      ks['zones'].each do |zone|
-        zones << zone['zone'] if zone['availability'] != 'unavailable'
+      ks['metaZones'].each do |zone|
+        zones << zone['zone'] unless ['unavailable', 'unknown'].include?(zone['availability'])
       end
       availabilities[server_mapping[ks['reference']]] = zones
     end
@@ -35,13 +35,13 @@ class KimsufiAvailability
 
   def server_mapping
     {
-      '142sk9' => 'ks1',
-      '142sk2' => 'ks2',
-      '142sk3' => 'ks3',
-      '142sk4' => 'ks4',
-      '142sk5' => 'ks5a',
-      '142sk8' => 'ks5b',
-      '142sk6' => 'ks6',
+      '150sk10' => 'ks1',
+      '150sk20' => 'ks2',
+      '150sk22' => 'ks2ssd',
+      '150sk30' => 'ks3',
+      '150sk40' => 'ks4',
+      '150sk50' => 'ks5',
+      '150sk60' => 'ks6',
     }
   end
 
